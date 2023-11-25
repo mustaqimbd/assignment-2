@@ -104,4 +104,71 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-export { createUser, getAUser, getAllUsers, updateUser, deleteUser }
+const addUserOrder = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userService.addUserOrderInDB(req.params.userId, req.body)
+        if (!result) {
+            return res.json({
+                "success": false,
+                "message": "User not found",
+                "error": {
+                    "code": 404,
+                    "description": "User not found!"
+                }
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Order created successfully!",
+            data: null
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+const getUserAllOrders = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userService.getUserAllOrdersFromDB(req.params.userId)
+        if (!result) {
+            return res.json({
+                "success": false,
+                "message": "User not found",
+                "error": {
+                    "code": 404,
+                    "description": "User not found!"
+                }
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: result[0]
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+const getUserOrdersTotalPrice = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userService.getUserOrdersTotalPriceFromDB(req.params.userId)
+        if (!result) {
+            return res.json({
+                "success": false,
+                "message": "User not found",
+                "error": {
+                    "code": 404,
+                    "description": "User not found!"
+                }
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: result[0]
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export { createUser, getAUser, getAllUsers, updateUser, deleteUser, addUserOrder, getUserAllOrders, getUserOrdersTotalPrice }
