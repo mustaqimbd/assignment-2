@@ -31,4 +31,13 @@ const updateUserInDB = async (id: string, data: TUser) => {
     return result
 }
 
-export const userService = { createUserInDB, getAUserFromDB, getAllUsersFromDB, updateUserInDB }
+const deleteUserInDB = async (id: string) => {
+    const user = await UserModel.isNotUserEXist(id)
+    if (!user) {
+        return user
+    }
+    const result = await UserModel.deleteOne({ userId: id })
+    return result
+}
+
+export const userService = { createUserInDB, getAUserFromDB, getAllUsersFromDB, updateUserInDB, deleteUserInDB }
