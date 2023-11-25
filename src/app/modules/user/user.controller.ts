@@ -18,5 +18,17 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userService.getAllUsersFromDB()
+        res.status(200).json({
+            success: true,
+            message: "User created successfully!",
+            data: result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 
-export { createUser }
+export { createUser, getAllUsers }
