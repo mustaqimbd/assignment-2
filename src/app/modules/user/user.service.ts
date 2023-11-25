@@ -7,6 +7,10 @@ const createUserInDB = async (data: TUser) => {
 }
 
 const getAUserFromDB = async (id: string) => {
+    const user = await UserModel.isNotUserEXist(id)
+    if (!user) {
+        return user
+    }
     const result = await UserModel.findOne({ userId: id })
     return result
 }
@@ -16,4 +20,15 @@ const getAllUsersFromDB = async () => {
     return result
 }
 
-export const userService = { createUserInDB, getAUserFromDB, getAllUsersFromDB }
+const updateUserInDB = async (id: string, data: TUser) => {
+    const user = await UserModel.isNotUserEXist(id)
+    if (!user) {
+        return user
+    }
+    const result = await UserModel.findOneAndUpdate({ userId: id },
+        { $set: { ...data } }, { new: true }
+    )
+    return result
+}
+
+export const userService = { createUserInDB, getAUserFromDB, getAllUsersFromDB, updateUserInDB }

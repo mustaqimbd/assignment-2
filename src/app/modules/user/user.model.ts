@@ -1,6 +1,6 @@
-import { Document, Schema, model } from "mongoose";
-import { TUser } from "./user.interface";
+import { Schema, model, Document } from "mongoose";
 import bcrypt from "bcrypt"
+import { TUser, TUserModel } from "./user.interface";
 
 interface IUserDocument extends TUser, Document { }
 
@@ -21,7 +21,7 @@ const orderSchema = new Schema({
     quantity: { type: Number }
 })
 
-const userSchema = new Schema<IUserDocument>({
+const userSchema = new Schema<IUserDocument, TUserModel>({
     userId: { type: Number, unique: true, required: true },
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
@@ -51,8 +51,11 @@ userSchema.methods.toJSON = function () {
     return user
 }
 
+userSchema.statics.isNotUserEXist = async (id) => {
+    const user = await UserModel.findOne({ userId: id })
+    return user
+}
 
-
-const UserModel = model<IUserDocument>('user', userSchema)
+const UserModel = model<IUserDocument, TUserModel>('user', userSchema)
 
 export default UserModel
